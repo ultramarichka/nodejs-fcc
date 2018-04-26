@@ -30,6 +30,7 @@ https://github.com/maxogden/art-of-node#callbacks
    
      [ 'node', '/path/to/your/program.js', '1', '2', '3' ]  
 <blank>
+
     var numbers = process.argv.slice(2);
     var result = numbers.reduce(function(accumulator, currentValue) {
         return Number(accumulator) + Number(currentValue);
