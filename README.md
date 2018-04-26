@@ -119,4 +119,54 @@ function callback(err, data){
       } else {return false;}
     }
 
+6. ## MAKE IT MODULAR 
+
+  Create a program that prints a list of files in a given directory,  
+  filtered by the extension of the files. The first argument is the  
+  directory name and the second argument is the extension filter. Print the  
+  list of files (one file per line) to the console. You must use  
+  asynchronous I/O.  
+   
+  You must write a module file to do most of the work. The module must  
+  export a single function that takes three arguments: the directory name,  
+  the filename extension string and a callback function, in that order. The  
+  filename extension argument must be the same as what was passed to your  
+  program.
+
+
+    (app6.js)
+    var mymodule = require('./func6.js'); 
+
+    function printFromArr(err, arr){
+      if (err){
+        console.log("error");
+      } else {
+        console.log(arr.join('\n'));
+      }
+    }
+
+    mymodule(process.argv[2], process.argv[3], printFromArr);
+<blank>
+
+    (func6.js)
+    var fs = require('fs');  //enable module  with wich my project3.js can read a file
+
+    module.exports = function (dirPath, extension, callback) {
+      function returnsTrueIfExtensionMatchs(el){
+        if (el.match('.'+ extension + '$')){
+          return true;
+        } else {return false;}
+      }
+      
+      fs.readdir(dirPath, extension, ljubajaFunkcija);
+      
+      function ljubajaFunkcija(err, data){
+        if (err){
+          callback(err);
+        } else {
+          var arr = data.filter(returnsTrueIfExtensionMatchs);
+          callback(null, arr);
+        }
+      }  
+    };
 
