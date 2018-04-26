@@ -1,11 +1,12 @@
 https://github.com/maxogden/art-of-node#callbacks
 
 1. HELLO WORLD
+
    To make a Node.js program, create a new file with a .js extension and  
   start writing JavaScript! Execute your program by running it with the node  
   command. e.g.:  
    
-     $ node program.js  
+    $ node program.js  
    
   You can write to the console in the same way as in the browser:  
    
@@ -89,3 +90,33 @@ function callback(err, data){
   }
 }
 ```
+
+## FILTER DIRECTORY FOR A FILE NAME
+
+ 
+  Create a program that prints a list of files in a given directory,  
+  filtered by the extension of the files. You will be provided a directory  
+  name as the first argument to your program (e.g. '/path/to/dir/') and a  
+  file extension to filter by as the second argument.  
+
+    var fs = require('fs');  //enable module  with wich my project3.js can read a file
+    //console.log(process.argv);
+
+    fs.readdir(process.argv[2], process.argv[3], callback);
+    //console.log('file_extension', process.argv[3]);
+    function callback(err, files){
+      if (err){
+        console.log("error");
+      } else {
+        var arr = files.filter(returnsTrueIfExtensionMatchs);
+        console.log(arr.join('\n'));
+      }
+    }
+
+    function returnsTrueIfExtensionMatchs(el){
+      if (el.match('.'+process.argv[3]+ '$')){
+        return true;
+      } else {return false;}
+    }
+
+
