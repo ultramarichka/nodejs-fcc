@@ -80,7 +80,7 @@ console.log(result.length);
 4. Asyncronous I/O
 
 
-
+```javascript
 var fs = require('fs');  //enable module  with wich my project3.js can read a file
 fs.readFile(process.argv[2],'utf8', callback);
 function callback(err, data){
@@ -91,3 +91,4 @@ function callback(err, data){
     console.log(result.length);
   }
 }
+```
