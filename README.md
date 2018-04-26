@@ -142,45 +142,45 @@ function callback(err, data){
    4. Handle all the errors that may occur and pass them to the callback.  
 
     
-     ```javascript
-    (func6.js)
-    var fs = require('fs');  //enable module  with wich my project3.js can read a file
+```javascript
+(func6.js)
+var fs = require('fs');  //enable module  with wich my project3.js can read a file
 
-    module.exports = function (dirPath, extension, callback) {
-      function returnsTrueIfExtensionMatchs(el){
-        if (el.match('.'+ extension + '$')){
-          return true;
-        } else {return false;}
-      }
-      
-      fs.readdir(dirPath, extension, ljubajaFunkcija);
-      
-      function ljubajaFunkcija(err, data){
-        if (err){
-          callback(err);
-        } else {
-          var arr = data.filter(returnsTrueIfExtensionMatchs);
-          callback(null, arr);
-        }
-      }  
-    };
-     ```
+module.exports = function (dirPath, extension, callback) {
+  function returnsTrueIfExtensionMatchs(el){
+    if (el.match('.'+ extension + '$')){
+      return true;
+    } else {return false;}
+  }
+  
+  fs.readdir(dirPath, extension, ljubajaFunkcija);
+  
+  function ljubajaFunkcija(err, data){
+    if (err){
+      callback(err);
+    } else {
+      var arr = data.filter(returnsTrueIfExtensionMatchs);
+      callback(null, arr);
+    }
+  }  
+};
+```
 
 <blank>
 
 ```javascript
-    (app6.js)
-    var mymodule = require('./func6.js'); 
+(app6.js)
+var mymodule = require('./func6.js'); 
 
-    function printFromArr(err, arr){
-      if (err){
-        console.log("error");
-      } else {
-        console.log(arr.join('\n'));
-      }
-    }
+function printFromArr(err, arr){
+  if (err){
+    console.log("error");
+  } else {
+    console.log(arr.join('\n'));
+  }
+}
 
-    mymodule(process.argv[2], process.argv[3], printFromArr);
+mymodule(process.argv[2], process.argv[3], printFromArr);
 ```
 
  ## 7.HTTP CLIENT
