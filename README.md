@@ -47,7 +47,7 @@ var result = 0
     
     console.log(result);
 */
-----------------
+
 
 3. Write a program that uses a single synchronous filesystem operation to  
   read a file and print the number of newlines (\n) it contains to the  
@@ -68,15 +68,18 @@ var result = 0
   file:///home/ubuntu/.nvm/versions/node/v6.11.3/lib/node_modules/learnyouno  
   de/node_apidoc/buffer.html
 
--------------
+
+
 var fs = require('fs');  //enable module  with wich my project3.js can read a file
 var buf = fs.readFileSync(process.argv[2]); //returns a Buffer object containing the complete contents of the file.  
 var str = buf.toString();
 var result = str.match(/\n+/g);
 console.log(result.length);
---------------
+
 
 4. Asyncronous I/O
+
+
 
 var fs = require('fs');  //enable module  with wich my project3.js can read a file
 fs.readFile(process.argv[2],'utf8', callback);
