@@ -91,14 +91,14 @@ function callback(err, data){
 }
 ```
 
-## FILTER DIRECTORY FOR A FILE NAME
+## 5. FILTER DIRECTORY FOR A FILE NAME
 
  
   Create a program that prints a list of files in a given directory,  
   filtered by the extension of the files. You will be provided a directory  
   name as the first argument to your program (e.g. '/path/to/dir/') and a  
   file extension to filter by as the second argument.  
-
+    ```javascript
     var fs = require('fs');  //enable module  with wich my project3.js can read a file
     //console.log(process.argv);
 
@@ -118,8 +118,9 @@ function callback(err, data){
         return true;
       } else {return false;}
     }
+    ```
 
-6. ## MAKE IT MODULAR 
+## 6. MAKE IT MODULAR 
 
   Create a program that prints a list of files in a given directory,  
   filtered by the extension of the files. The first argument is the  
@@ -133,21 +134,15 @@ function callback(err, data){
   filename extension argument must be the same as what was passed to your  
   program.
 
+  These four things are the contract that your module must follow.  
+   
+   1. Export a single function that takes exactly the arguments described.  
+   2. Call the callback exactly once with an error or some data as described.  
+   3. Don't change anything else, like global variables or stdout.  
+   4. Handle all the errors that may occur and pass them to the callback.  
 
-    (app6.js)
-    var mymodule = require('./func6.js'); 
-
-    function printFromArr(err, arr){
-      if (err){
-        console.log("error");
-      } else {
-        console.log(arr.join('\n'));
-      }
-    }
-
-    mymodule(process.argv[2], process.argv[3], printFromArr);
-<blank>
-
+    
+     ```javascript
     (func6.js)
     var fs = require('fs');  //enable module  with wich my project3.js can read a file
 
@@ -169,4 +164,57 @@ function callback(err, data){
         }
       }  
     };
+     ```
+
+<blank>
+
+```javascript
+    (app6.js)
+    var mymodule = require('./func6.js'); 
+
+    function printFromArr(err, arr){
+      if (err){
+        console.log("error");
+      } else {
+        console.log(arr.join('\n'));
+      }
+    }
+
+    mymodule(process.argv[2], process.argv[3], printFromArr);
+```
+
+ ## 7.HTTP CLIENT
+
+  Write a program that performs an HTTP GET request to a URL provided to you  
+  as the first command-line argument. Write the String contents of each  
+  "data" event from the response to a new line on the console (stdout).  
+
+```javascript
+var http = require('http');
+var url = process.argv[2];
+http.get(url, callback);
+
+function callback (response) { 
+    response.setEncoding('utf8');
+    response.on("error", (err) => {if (err){console.log(err.message);}});
+    response.on("data", function (data) {
+        console.log(data);
+    });
+} 
+
+//official solution
+/*
+ var http = require('http')
+    
+    http.get(process.argv[2], function (response) {
+      response.setEncoding('utf8')
+      response.on('data', console.log)
+      response.on('error', console.error)
+    }).on('error', console.error)
+
+*/
+```
+  
+
+
 
