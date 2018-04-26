@@ -30,23 +30,19 @@ https://github.com/maxogden/art-of-node#callbacks
    
      [ 'node', '/path/to/your/program.js', '1', '2', '3' ]  
 
----------------
-var numbers = process.argv.slice(2);
-var result = numbers.reduce(function(accumulator, currentValue) {
-    return Number(accumulator) + Number(currentValue);
-});
-console.log(result);
+    var numbers = process.argv.slice(2);
+    var result = numbers.reduce(function(accumulator, currentValue) {
+        return Number(accumulator) + Number(currentValue);
+    });
+    console.log(result);
 
-/*official solution
-
-var result = 0
-    
+    /*official solution
+    var result = 0;
     for (var i = 2; i < process.argv.length; i++) {
       result += Number(process.argv[i])
     }
     
-    console.log(result);
-*/
+    console.log(result);*/
 
 
 3. Write a program that uses a single synchronous filesystem operation to  
@@ -70,11 +66,11 @@ var result = 0
 
 
 
-var fs = require('fs');  //enable module  with wich my project3.js can read a file
-var buf = fs.readFileSync(process.argv[2]); //returns a Buffer object containing the complete contents of the file.  
-var str = buf.toString();
-var result = str.match(/\n+/g);
-console.log(result.length);
+    var fs = require('fs');  //enable module  with wich my project3.js can read a file
+    var buf = fs.readFileSync(process.argv[2]); //returns a Buffer object containing the complete contents of the file.  
+    var str = buf.toString();
+    var result = str.match(/\n+/g);
+    console.log(result.length);
 
 
 4. Asyncronous I/O
