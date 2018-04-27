@@ -183,7 +183,7 @@ function printFromArr(err, arr){
 mymodule(process.argv[2], process.argv[3], printFromArr);
 ```
 
- ## 7.HTTP CLIENT
+## 7.HTTP CLIENT: GET
 
   Write a program that performs an HTTP GET request to a URL provided to you  
   as the first command-line argument. Write the String contents of each  
@@ -213,6 +213,205 @@ function callback (response) {
     }).on('error', console.error)
 
 */
+```
+## 8. HTTP COLLECT (GET: Collect ALL data from the server)
+
+  Write a program that performs an HTTP GET request to a URL provided to you  
+  as the first command-line argument. Collect all data from the server (not  
+  just the first "data" event) and then write two lines to the console  
+  (stdout).  
+   
+  The first line you write should just be an integer representing the number  
+  of characters received from the server. The second line should contain the  
+  complete String of characters sent by the server.  
+
+```javascript
+var http = require('http');
+var url = process.argv[2];
+http.get(url, callback);
+
+
+function callback (response) { 
+    var result ="";
+    response.setEncoding('utf8');
+    response.on("error", console.error);
+    response.on("data", function (data) {
+        
+        result += data;
+        
+    });
+    response.on('end', function () {
+              console.log(result.length);
+              console.log(result);
+        });
+} 
+```
+
+  2nd method) Use a third-party package to abstract the difficulties involved in  
+  collecting an entire stream of data. Two different packages provide a  
+  useful API for solving this problem (there are likely more!): bl (Buffer  
+  List) and concat-stream; take your pick!  
+   
+  <https://npmjs.com/bl> <https://npmjs.com/concat-stream>  
+
+    $ npm install bl  
+<blank>
+
+```javascript
+var bl = require('bl')  
+```
+
+  Both bl and concat-stream can have a stream piped in to them and they will  
+  collect the data for you. Once the stream has ended, a callback will be  
+  fired with the data:  
+   
+```javascript
+response.pipe(bl(function (err, data) { /* ... */ }))  
+// or  
+response.pipe(concatStream(function (data) { /* ... */ }))  
+```
+ 
+  Note that you will probably need to data.toString() to convert from a  
+  Buffer.    
+
+## 9.JUGGLING ASYNC (ASYNC COLLECT)
+
+  This problem is the same as the previous problem (HTTP COLLECT) in that  
+  you need to use http.get(). However, this time you will be provided with  
+  three URLs as the first three command-line arguments.  
+   
+  You must collect the complete content provided to you by each of the URLs  
+  and print it to the console (stdout). You don't need to print out the  
+  length, just the data as a String; one line per URL. The catch is that you  
+  must print them out in the same order as the URLs are provided to you as  
+  command-line arguments.  
+
+  Counting callbacks is one of the fundamental ways of managing async in  
+  Node. Rather than doing it yourself, you may find it more convenient to  
+  rely on a third-party library such as [async](https://npmjs.com/async) or  
+  [after](https://npmjs.com/after). But for this exercise, try and do it  
+  without any external helper library. 
+
+```javascript
+var http = require('http');
+var url1 = process.argv[2];
+var url2 = process.argv[3];
+var url3 = process.argv[4];
+http.get(url1, callback);
+
+
+function callback (response) { 
+    var result ="";
+    response.setEncoding('utf8');
+    response.on("error", console.error);
+    response.on("data", function (data) {
+        
+        result += data;
+        
+    });
+    response.on('end', function () {
+              
+              console.log(result);
+    });
+    http.get(url2, callback2);    
+} 
+
+function callback2 (response) { 
+    var result ="";
+    response.setEncoding('utf8');
+    response.on("error", console.error);
+    response.on("data", function (data) {
+        
+        result += data;
+        
+    });
+    response.on('end', function () {
+              
+              console.log(result);
+    });
+    http.get(url3, callback3);    
+} 
+
+function callback3 (response) { 
+    var result ="";
+    response.setEncoding('utf8');
+    response.on("error", console.error);
+    response.on("data", function (data) {
+        
+        result += data;
+        
+    });
+    response.on('end', function () {
+              
+              console.log(result);
+    });
+} 
+```
+
+## 10.TIME SERVER
+
+  Your server should listen to TCP connections on the port provided by the  
+  first argument to your program. For each connection you must write the  
+  current date & 24 hour time in the format:  
+   
+     "YYYY-MM-DD hh:mm"  
+   
+  followed by a newline character. Month, day, hour and minute must be  
+  zero-filled to 2 integers. For example:  
+   
+     "2013-07-06 17:42"  
+   
+  After sending the string, close the connection.
+
+  # HINTS  
+   
+  For this exercise we'll be creating a raw TCP server. There's no HTTP  
+  involved here so we need to use the net module from Node core which has  
+  all the basic networking functions.  
+   
+  The net module has a method named net.createServer() that takes a  
+  function. The function that you need to pass to net.createServer() is a  
+  connection listener that is called more than once. Every connection  
+  received by your server triggers another call to the listener. The  
+  listener function has the signature:  
+   
+     function listener(socket) { /* ... */ }  
+   
+  net.createServer() also returns an instance of your server. You must call  
+  server.listen(portNumber) to start listening on a particular port.   
+
+  Or, if you want to be adventurous, use the strftime package from npm. The  
+  strftime(fmt, date) function takes date formats just like the unix date  
+  command. You can read more about strftime at:  
+  (https://github.com/samsonjs/strftime)  
+
+```javascript
+var net = require('net');  
+var server = net.createServer(listener); 
+
+function listener(socket) {  
+  new Date();
+  var currentTime = new Date();
+  var year = 'YYYY';
+  var month = 'MM';
+  var date = 'DD';
+  var hours = 'hh';
+  var minutes = 'mm';
+  
+  year = currentTime.getFullYear().toString();  
+  month = currentTime.getMonth();     // starts at 0 
+  month = month +1;
+  if (month.length < 2) {month = "0".concat(month.toString());}
+  date = currentTime.getDate().toString();      // returns the day of month  
+  hours = currentTime.getHours().toString();  
+  minutes = currentTime.getMinutes().toString(); 
+  var summeryTime = year + '-' + month + '-' + date +' ' + hours +":"+ minutes + "\n";
+     
+   //socket.write(summeryTime, 'utf8');
+   socket.end(summeryTime);
+ }
+
+ server.listen(process.argv[2]);  
 ```
   
 
