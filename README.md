@@ -363,7 +363,7 @@ function callback3 (response) {
    
   After sending the string, close the connection.
 
-  # HINTS  
+### HINTS  
    
   For this exercise we'll be creating a raw TCP server. There's no HTTP  
   involved here so we need to use the net module from Node core which has  
@@ -456,7 +456,7 @@ server.listen(portNumber);
   Your server should listen on the port provided by the first argument to  
   your program.  
 
-# Hint
+### HINT
 
   through2-map allows you to create a transform stream using only a single  
   function that takes a chunk of data and returns a chunk of data. It's  
@@ -497,6 +497,107 @@ var server = http.createServer(function (req, res) {
 })
 
 server.listen(Number(process.argv[2])) */
+```
+
+## 13. HTTP JSON API SERVER
+
+  Write an HTTP server that serves JSON data when it receives a GET request  
+  to the path '/api/parsetime'. Expect the request to contain a query string  
+  with a key 'iso' and an ISO-format time as the value.  
+   
+  For example:  
+   
+  /api/parsetime?iso=2013-08-10T12:10:15.474Z  
+   
+  The JSON response should contain only 'hour', 'minute' and 'second'  
+  properties. For example:  
+   
+     {  
+       "hour": 14,  
+       "minute": 23,  
+       "second": 15  
+     }  
+   
+  Add second endpoint for the path '/api/unixtime' which accepts the same  
+  query string but returns UNIX epoch time in milliseconds (the number of  
+  milliseconds since 1 Jan 1970 00:00:00 UTC) under the property 'unixtime'.  
+  For example:  
+   
+     { "unixtime": 1376136615474 }  
+   
+  Your server should listen on the port provided by the first argument to  
+  your program.
+
+# HINTS  
+   
+  The request object from an HTTP server has a url property that you will  
+  need to use to "route" your requests for the two endpoints.  
+   
+  You can parse the URL and query string using the Node core 'url' module.  
+  url.parse(request.url, true) will parse content of request.url and provide  
+  you with an object with helpful properties.  
+   
+  For example, on the command prompt, type:  
+   
+     $ node -pe "require('url').parse('/test?q=1', true)"  
+
+  You should also be a good web citizen and set the Content-Type properly:  
+   
+     res.writeHead(200, { 'Content-Type': 'application/json' })  
+
+```javascript
+var http = require('http');
+var url = require('url');
+
+var server1 = http.createServer(callback); 
+
+function callback (request, response) {
+  var result ="";
+  if (request.method !== 'GET') {
+    return response.end('send me a GET\n');
+  } 
+  request.on('error', function(err) {
+    response.end(err);
+  });
+  var q = url.parse(request.url, true);
+  var str = q.query.iso;
+  console.log(str);
+  
+  var year = Number(str.slice(0,4));
+  var month = Number(str.slice(5,7))-1;
+  console.log(month);
+  var day = Number(str.slice(8,10));
+  var hour = Number(str.slice(11,13));
+  var minute = Number(str.slice(14,16));
+  var second = Number(str.slice(17,19));
+  var ms = Number(str.slice(20,23));
+  
+  if (q.pathname == '/api/parsetime'){
+    var myJSON1 = {  
+         "hour": hour,  
+         "minute": minute,  
+         "second": second  
+       }; 
+    result = JSON.stringify(myJSON1);
+  }
+  if (q.pathname == '/api/unixtime'){
+    var date = new Date(year, month, day, hour, minute, second, ms );
+    
+    console.log("date", date);
+    var unixTime = date.getTime();
+  
+    var myJSON2 = {
+    "unixtime": unixTime  
+    };
+    result = JSON.stringify(myJSON2);
+  }
+  response.writeHead(200, { 'Content-Type': 'application/json' });
+  
+  response.write(result);
+  response.end();
+}
+
+server1.listen(process.argv[2]);
 ```
 
   
