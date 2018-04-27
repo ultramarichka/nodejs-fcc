@@ -413,6 +413,41 @@ function listener(socket) {
 
  server.listen(process.argv[2]);  
 ```
+
+## 11.HTTP FILE SERVER 
+
+  Write an HTTP server that serves the same text file for each request it  
+  receives.  
+   
+  Your server should listen on the port provided by the first argument to  
+  your program.  
+   
+  You will be provided with the location of the file to serve as the second  
+  command-line argument. You must use the fs.createReadStream() method to  
+  stream the file contents to the response.
+
+```javascript
+var http = require('http');
+var fs = require('fs');
+var portNumber = process.argv[2];
+var path = process.argv[3];
+console.log(path);
+var server = http.createServer(callback);  
+
+function callback (request, response) { 
+  var readStream = fs.createReadStream(path);
+  readStream.on('open', function () {
+    // This just pipes the read stream to the response object (which goes to the client)
+    readStream.pipe(response);
+  });
+  readStream.on('error', function(err) {
+    response.end(err);
+  });
+}  
+
+server.listen(portNumber);
+```
+
   
 
 
