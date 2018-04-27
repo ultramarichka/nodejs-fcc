@@ -448,6 +448,57 @@ function callback (request, response) {
 server.listen(portNumber);
 ```
 
+## 12.HTTP UPPERCASERER (recieves only POST req)
+   
+  Write an HTTP server that receives only POST requests and converts  
+  incoming POST body characters to upper-case and returns it to the client.  
+   
+  Your server should listen on the port provided by the first argument to  
+  your program.  
+
+# Hint
+
+  through2-map allows you to create a transform stream using only a single  
+  function that takes a chunk of data and returns a chunk of data. It's  
+  designed to work much like Array#map() but for streams
+
+    $ npm install through2-map  
+
+```javascript
+var http = require('http');
+var map = require('through2-map');
+
+var server = http.createServer(callback);  
+
+function callback (inStream, outStream) { 
+  inStream.pipe(map(toUppCase)).pipe(outStream);
+}  
+   
+ 
+ function toUppCase (chunk) {  
+   return chunk.toString().toUpperCase();  
+ }
+ 
+ server.listen(process.argv[2]);
+ 
+//official solution
+/* 
+var http = require('http')
+var map = require('through2-map')
+
+var server = http.createServer(function (req, res) {
+  if (req.method !== 'POST') {
+    return res.end('send me a POST\n')
+  }
+
+  req.pipe(map(function (chunk) {
+    return chunk.toString().toUpperCase()
+  })).pipe(res)
+})
+
+server.listen(Number(process.argv[2])) */
+```
+
   
 
 
